@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Gonbus APS  | BUSWASH {% endblock %}
+
+{% block content %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=3.0, minimum-scale=0.86">
+
+{% if messages %}
+	{% for message in messages %}
+	
+		<div class="alert alert-dark" role="alert">
+			<button class="close" data-dismiss="alert">
+	            <small><sup>x</sup></small>
+	        </button>
+			{{ message }}
+			{% endfor%}
+		</div>
+
+{% endif %}
+		
+	{% if all_items %}
+	
+	<div class="jumbotron-fluid">
+		<h3>Dagens busvask oversigt.</h3>
+		<hr class="my-4">
+		<p class="lead">Vaskelisten sendes af Larsenbus kontoret. Kontakt venligst Larsenbus vedr. ændringer og m.m.</p>
+		<div class="container-fluid">
+		<table class="table table-hover table-sm table-light">
+				
+				{% for things in all_items %}
+					{% if things.completed %}
+						<tr class="table-success">
+							<td class="striker"><i class="fas fa-bus"></i> {{ things.bus }}</a></td>
+							<td class="striker">{{ things.Program }}</a></td>
+							<td class="striker">{{ things.Kommentar }}</a></td>
+							<td>Bussen er klar!  <i class="fa fa-check" aria-hidden="true"></i>
+
+						</tr>
+					{% else %}
+						<tr class="table table-secondary">
+							<td><i class="fas fa-bus"></i> {{ things.bus }}</a></td>
+							<td>{{ things.Program }}</a></td>
+							<td>{{ things.Kommentar }}</a></td>
+							<td>Venter..!  <i class="fa fa-clock-o"></i></td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+			<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+		</div>
+	  </div>
+	</div>
+ </div>
+</div>
+</div>
+</div>
+	{% endif %}
+{% endblock %}

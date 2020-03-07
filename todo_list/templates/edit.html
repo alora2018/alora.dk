@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} Busvask Gonbus! | Ændringer !{% endblock %}
+
+{% block content %}
+	{% if bus %}
+
+	<form class="form-inline my-2 my-lg-0" method="POST">
+      {% csrf_token %}
+      <input class="form-control mr-sm-2" type="search" placeholder="{{ item.bus }}"
+      value="{{ item.bus }}" aria-label="Search" name="bus">
+			<input class="form-control mr-sm-2" type="search" placeholder="{{ item.Program }}"
+			value="{{ item.Program }}" aria-label="Search" name="Program">
+			<input class="form-control mr-sm-2" type="search" placeholder="{{ item.Kommentar }}"
+			value="{{ item.Kommentar }}" aria-label="Search" name="Kommentar">
+
+      <input type="hidden" value="{{ item.completed }}" name="completed">
+
+      <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Gem!</button>
+    </form>
+
+
+
+
+	{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+    <img src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.0-9/84263036_870495023385203_5208928562697994240_n.png?_nc_cat=101&_nc_oc=AQlFoPQNTmef63hXM64Mb0sSrTBybR2ANvXG0AOxzs2HyXyKGzFi3G-zENd4qbqm1qA&_nc_ht=scontent-arn2-1.xx&oh=3ce6a640e49d15c225d72381bbaba897&oe=5EC7E7AD" height="50px" />
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
