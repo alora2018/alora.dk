@@ -1,91 +1,214 @@
-from django.shortcuts import render, redirect
-from .models import Vaskelist 
-from .forms import ListForm
-from django.contrib import messages
+from django.shortcuts import render, redirect 
 from django.http import HttpResponse
-from django.template import Context, loader
+from django.forms import inlineformset_factory
+from django.contrib.auth.forms import UserCreationForm
+
+from django.contrib.auth import authenticate, login, logout
+
+from django.contrib import messages
 from datetime import date
-from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 import datetime
+# Create your views here.
+from .models import *
+from .forms import OrderForm, CreateUserForm
+from .filters import OrderFilter
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
-def home(request):
+@unauthenticated_user
+def registerPage(request):
+
+	form = CreateUserForm()
+	if request.method == 'POST':
+		form = CreateUserForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			username = form.cleaned_data.get('username')
+
+			group = Group.objects.get(name='customer')
+			user.groups.add(group)
+
+			messages.success(request, 'Account was created for ' + username)
+
+			return redirect('login')
+		
+
+	context = {'form':form}
+	return render(request, 'accounts/register.html', context)
+
+
+@unauthenticated_user
+def loginPage(request):
 
 	if request.method == 'POST':
-		form = ListForm(request.POST or None)
+		username = request.POST.get('username')
+		password =request.POST.get('password')
 
-		if form.is_valid():
-			form.save()
-			all_items = Vaskelist.objects.all
-			messages.success(request, ('Bus og Program er tastet ind!'))
-			return render(request, 'home.html', {'all_items': all_items})
+		user = authenticate(request, username=username, password=password)
 
-	else:
-		all_items = Vaskelist.objects.all
-		return render(request, 'home.html', {'all_items': all_items})
-
-def about(request):
-	context = {'first_name': 'John', 'last_name': 'Elder'}
-	return render(request, 'about.html', context)
-	
-def vaskelist(request):
-			today = datetime.date.today()
-			all_items = Vaskelist.objects.all().filter(end_date__gte=date.today())		
-			return render(request, 'vaskelist.html', {'all_items': all_items})
-
-def index(request):
-			today = datetime.date.today()
-			all_items = Vaskelist.objects.all().filter(start_date__gte=datetime.date.today(), \
-			end_date__lte=datetime.date.today() + datetime.timedelta(hours=24))
-
-			return render(request, 'index.html', {'all_items': all_items})
-
-
-def larsenbus(request):
-	if request.method == 'POST':
-		form = ListForm(request.POST or None)
-
-		if form.is_valid():
-			form.save()
-			all_items = Vaskelist.objects.all
-			messages.success(request, ('Bus og Program er tastet ind!'))
-			return render(request, 'larsenbus.html', {'all_items': all_items})
-
-	else:
-		all_items = Vaskelist.objects.all
-		return render(request, 'larsenbus.html', {'all_items': all_items})
-
-
-
-def delete(request, list_id):
-	bus = Vaskelist.objects.get(pk=list_id)
-	bus.delete()
-	messages.success(request, ('Bus er slettet fra listen!'))
-	return redirect('home')
-
-def cross_off(request, list_id):
-	bus = Vaskelist.objects.get(pk=list_id)
-	bus.completed = True
-	bus.save()
-	return redirect('vaskelist')
-
-def uncross(request, list_id):
-	bus = Vaskelist.objects.get(pk=list_id)
-	bus.completed = False
-	bus.save()
-	return redirect('vaskelist')
-
-def edit(request, list_id):
-	if request.method == 'POST':
-		bus = Vaskelist.objects.get(pk=list_id)
-
-		form = ListForm(request.POST or None, instance=bus)
-
-		if form.is_valid():
-			form.save()
-			messages.success(request, ('Bus/Program er blevet redigeret!'))
+		if user is not None:
+			login(request, user)
 			return redirect('home')
+		else:
+			messages.info(request, 'Username OR password is incorrect')
 
-	else:
-		bus = Vaskelist.objects.get(pk=list_id)
-		return render(request, 'edit.html', {'bus': bus})
+	context = {}
+	return render(request, 'accounts/login.html', context)
+
+
+def logoutUser(request):
+	logout(request)
+	return redirect('login')
+
+
+
+@login_required(login_url='login')
+@admin_only
+def home(request):
+	today = datetime.date.today()
+	orders = Order.objects.all()
+	customers = Customer.objects.all()
+	
+	total_customers = customers.count()
+
+	total_orders = orders.count()
+	Klar = orders.filter(status='Klar').count()
+	Ikke_Klar = orders.filter(status='Ikke_Klar').count()
+	
+	context = {'orders':orders, 'customers':customers,
+	'total_orders':total_orders,'Klar':Klar,
+	'Ikke_Klar':Ikke_Klar }
+
+	return render(request, 'accounts/dashboard.html', context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def userPage(request):
+	orders = request.user.customer.order_set.all()
+
+	total_orders = orders.count()
+	Klar = orders.filter(status='Klar').count()
+	Ikke_Klar = orders.filter(status='Ikke_Klar').count()
+
+	print('ORDERS:', orders)
+
+	context = {'orders':orders, 'total_orders':total_orders,
+	'Klar':Klar,'Ikke_Klar':Ikke_Klar}
+	return render(request, 'accounts/user.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def accountSettings(request):
+	customer = request.user.customer
+	form = CustomerForm(instance=customer)
+
+	if request.method == 'POST':
+		form = CustomerForm(request.POST, request.FILES,instance=customer)
+		if form.is_valid():
+			form.save()
+
+
+	context = {'form':form}
+	return render(request, 'accounts/account_settings.html', context)
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def products(request):
+	products = Product.objects.all()
+
+	return render(request, 'accounts/products.html', {'products':products})
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def customer(request, pk_test):
+	customer = Customer.objects.get(id=pk_test)
+	orders = customer.order_set.all()
+	order_count = orders.count()
+
+	total_orders = orders.count()
+	Klar = orders.filter(status='Klar').count()
+	Ikke_Klar = orders.filter(status='Ikke_Klar').count()
+
+	myFilter = OrderFilter(request.GET, queryset=orders)
+	orders = myFilter.qs 
+
+	context = {'customer':customer, 'Klar':Klar, 'Ikke_Klar':Ikke_Klar, 'orders':orders, 'order_count':order_count,
+	'myFilter':myFilter}
+	return render(request, 'accounts/customer.html',context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createOrder(request, pk):
+	OrderFormSet = inlineformset_factory(Customer, Order, fields=('bus', 'product', 'start_date', 'end_date', 'status'), extra=30 )
+	customer = Customer.objects.get(id=pk)
+	formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
+	#form = OrderForm(initial={'customer':customer})
+	if request.method == 'POST':
+		#print('Printing POST:', request.POST)
+		form = OrderForm(request.POST)
+		formset = OrderFormSet(request.POST, instance=customer)
+		if formset.is_valid():
+			formset.save()
+			return redirect('/')
+
+	context = {'form':formset}
+	return render(request, 'accounts/order_form.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def updateOrder(request, pk):
+
+	order = Order.objects.get(id=pk)
+	form = OrderForm(instance=order)
+
+	if request.method == 'POST':
+		form = OrderForm(request.POST, instance=order)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+	context = {'form':form}
+	return render(request, 'accounts/order_form.html', context)
+
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def deleteOrder(request, pk):
+	order = Order.objects.get(id=pk)
+	if request.method == "POST":
+		order.delete()
+		return redirect('/')
+
+	context = {'item':order}
+	return render(request, 'accounts/delete.html', context)
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def cross_off(request, list_id):
+	order = Order.objects.get(pk=list_id)
+	order.status = 'Ikke_Klar'
+	order.save()
+	return redirect('/')
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def uncross(request, list_id):
+	order = Order.objects.get(pk=list_id)
+	order.status = 'Klar'
+	order.save()
+	return redirect('/')
+
 

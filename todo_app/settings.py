@@ -22,13 +22,15 @@ DEBUG = True
 ALLOWED_HOSTS = ['busvask.herokuapp.com', 'www.buswash.dk', 'buswash.dk', 'localhost','127.0.0.1']
  # Application definition
 INSTALLED_APPS = [
-    'todo_list',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'todo_list',
+
+    'django_filters',
     
 ]
 MIDDLEWARE = [
@@ -84,10 +86,14 @@ AUTH_PASSWORD_VALIDATORS = [
  # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Europe/Copenhagen'
+
+TIME_ZONE = 'UTC'
+
 USE_I18N = True
+
 USE_L10N = True
-USE_TZ = False
+
+USE_TZ = True
  # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -97,14 +103,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-TIME_INPUT_FORMATS = [
-    '%H:%M:%S',  # 14:30:59
-    '%H:%M:%S.%f',  # 14:30:59.000200
-    '%H:%M',  # 14:30
-]
-DATETIME_INPUT_FORMATS = [
-    '%d/%m/%Y %H:%M:%S',  # 25/10/2006 14:30:59
-    '%d/%m/%Y %H:%M:%S.%f',  # 25/10/2006 14:30:59.000200
-    '%d/%m/%Y %H:%M',  # 25/10/2006 14:30
-]
 
+
+MEDIA_URL = '/images/'

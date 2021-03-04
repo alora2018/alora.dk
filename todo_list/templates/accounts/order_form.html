@@ -1,0 +1,26 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="jumbotron shadow-lg p-3 mb-5 bg-body bg-warning rounded">
+	<div class="d-grid gap-2 col-6 mx-auto">
+		<div class="card bg-warning card-body">
+
+			<form class="inline" action="" method="POST">
+				{% csrf_token %}
+				{{ form.management_form }}
+				{% for field in form %}
+					{{field}}
+					<hr>
+				{% endfor %}
+				
+				<input type="submit" class="btn btn-dark gap-2 col-12 mx-auto" name="Submit">
+			</form>
+
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

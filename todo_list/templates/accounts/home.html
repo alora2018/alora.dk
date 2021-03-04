@@ -1,0 +1,143 @@
+{% extends 'accounts/home.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<link href="{% static 'fontawesome_free/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesome_free/css/brands.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'fontawesome_free/css/solid.css' %}" rel="stylesheet" type="text/css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=3.0, minimum-scale=0.86">
+
+<div class="container-fluid">
+
+   		
+	{% if orders %}
+		
+		<div class="container-sm shadow-lg p-3 mb-5 bg-body rounded">
+
+		<div class="card text-dark shadow-lg bg-light mb-3">
+  <div class="card-body">
+<figure class="text-right">
+  <blockquote class="blockquote">
+  <br>
+
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center shadow-lg bg-warning  mb-3" id="total-orders">
+			  	<div class="card-header bg-info">
+			  		<h5 class="card-title">BUSSER I ALT</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title"> <i class="material-icons" style="font-size:34px;color:black" width="32" height="32">directions_bus</i>
+</i> {{ total_orders }}
+</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center shadow-lg bg-warning text-dark  mb-3" id="orders-delivered">
+			  	<div class="card-header bg-success">
+			  		<h5 class="card-title">BUSSER KLAR</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="green" class="bi bi-check2-circle" viewBox="0 0 16 16">
+  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+</svg> {{ Klar }}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center  shadow-lg bg-warning text-dark  mb-3" id="orders-pending">
+			  	<div class="card-header bg-danger">
+			  		<h5 class="card-title">BUSSER TILBAGE</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+</svg> {{ Ikke_Klar }}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+    <!--<p><b class="Display-3 badge bg-warning">I alt {{ all_items.count }} busser!</b></p>!-->
+  </blockquote>
+
+<div>
+                <div style="width:200px;float:right;clear:right;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="8" cy="8" r="8"/>
+</svg> Bussen er klar!</div>
+                <div style="width:200px;float:right;clear:right;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
+  <circle cx="8" cy="8" r="8"/>
+</svg> 	Under behandling!</div>
+            </div>
+<div class="callout-danger"></div>
+
+<div class="callout-success"></div>	
+
+</div>
+</div>
+
+
+
+<div class="contianer-fluid">
+
+				
+
+<table class="table table-bordered border-primary shadow-lg p-3 mb-5 bg-body rounded table-sm  table-hover">		
+	
+<thead class="bg-warning shadow-lg p-3 mb-5 bg-body rounded">
+	  
+    <tr>
+      <th class="text-center" scope="col"><small><h6>Bus</small></th>
+      <th class="text-center" scope="col"><small><h6>Program</small></th>
+      <th class="text-center" scope="col"><small><h6>Tid</small></th>
+      <th class="text-center" scope="col"><small><h6>Status</small></th>
+	</tr>
+</thead>
+
+
+
+			
+{% for order in orders %}
+	  {% if order.status == "Klar" %}
+
+	<tr class="table shadow-lg p-3 mb-5 table-bordered table-success">
+        <td class="text-center"><small>{{ order.bus }}</small></td>
+        <td class="text-center"><small>{{ order.program }}</small></td>
+		<td class="text-center"><small>{{ order.start_date|date:'H:i' }}</small></td>		
+		<!--<td class="text-center"><center><a href="{% url 'cross_off' order.id %}">!--><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+	</tr>
+
+	{% else %}
+
+	<tr class="table shadow-lg p-3 mb-5 table-bordered table-light">
+        <td class="text-center"><small>{{ order.bus }}</small></td>
+        <td class="text-center"><small>{{ order.program }}</small></td>
+		<td class="text-center"><small>{{ order.start_date|date:'H:i' }}</small></td>		
+		<!--<td class="text-center"><center><a href="{% url 'uncross' order.id %}">!--><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+	</tr>
+				{% endif %}
+				{% endfor %}
+				   </table>
+		</div>
+	{% endif %}
+{% endblock %}

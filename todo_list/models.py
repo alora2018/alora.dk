@@ -1,25 +1,62 @@
 from django.db import models
-from datetime import datetime
-from django.utils import timezone
-PROGRAM_CHOICES = ( 
-	("", "Valg program!"),
-    ("Program 1", "1"), 
-    ("Program 2", "2"), 
-    ("Program 3", "3"), 
-    ("Program 4", "4"), 
-  
-) 
+from django.contrib.auth.models import User
 
-BUS_CHOICES = ( 
+  
+# Create your models here.
+
+class Customer(models.Model):
+	user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+	name = models.CharField(max_length=200, null=True)
+	phone = models.CharField(max_length=200, null=True)
+	email = models.CharField(max_length=200, null=True)
+	date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+	def __str__(self):
+		return self.name
+
+
+class Tag(models.Model):
+	name = models.CharField(max_length=200, null=True)
+
+	def __str__(self):
+		return self.name
+
+class Product(models.Model):
+	CATEGORY = (
+			('Udvendig', 'Udvendig'),
+			('Udvendig + tank', 'Udvendig + tank'),
+			('Indvendig + Støvsuges', 'Indvendig + Støvsuges'),
+			('Indvendig + Støvsuges + Vinduer', 'Indvendig + Støvsuges + Vinduer'),
+			) 
+
+	name = models.CharField(max_length=200, null=True)
+	price = models.FloatField(null=True)
+	category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+	description = models.CharField(max_length=200, null=True, blank=True)
+	date_created = models.DateTimeField(auto_now_add=True, null=True)
+	tags = models.ManyToManyField(Tag)
+
+	def __str__(self):
+		return self.name
+
+class Order(models.Model):
+	STATUS = (
+			('Ikke_klar', 'Ikke_klar'),
+			('Klar', 'Klar'),
+			)
+
+
+
+	BUS_CHOICES = ( 
 	("", "Valg bus!"),
-    ("Dania 00", "Dania 00"), 
-    ("Dania 1", "Dania 1"), 
-    ("Dania 2", "Dania 2"), 
-    ("Dania 3", "Dania 3"), 
-    ("Dania 4", "Dania 4"), 
-    ("Dania 5", "Dania 5"), 
-    ("Dania 6", "Dania 6"), 
-    ("Dania 7", "Dania 7"), 
+	("Dania 00", "Dania 00"), 
+	("Dania 1", "Dania 1"), 
+	("Dania 2", "Dania 2"), 
+	("Dania 3", "Dania 3"), 
+	("Dania 4", "Dania 4"), 
+	("Dania 5", "Dania 5"), 
+	("Dania 6", "Dania 6"), 
+	("Dania 7", "Dania 7"), 
 	("Dania 8", "Dania 8"), 
 	("Dania 9", "Dania 9"), 
 	("Dania 10", "Dania 10"), 
@@ -73,18 +110,15 @@ BUS_CHOICES = (
 	("NY DD1", "NY DD1"),
 	("NY DD2", "NY DD2"),
 
-) 
-
-class Vaskelist(models.Model):
-	timestamp = models.DateField(default=timezone.now)
+	)
+	customer = models.ForeignKey(Customer, null=True, on_delete= models.SET_NULL)
+	product = models.ForeignKey(Product, null=True, on_delete= models.SET_NULL)
 	bus = models.CharField(max_length=200, choices = BUS_CHOICES, 
     default = '')
-	Program = models.CharField(max_length=200, choices = PROGRAM_CHOICES, 
-    default = '0')
-	Kommentar = models.CharField(blank=True, max_length=200)
-	completed = models.BooleanField(default=False)
+	status = models.CharField(max_length=200, null=True, blank=True,  choices=STATUS)
 	start_date = models.DateTimeField(blank=True, null=True)
 	end_date = models.DateTimeField(blank=True, null=True)
-	def __str__(self):
-		return self.bus + ' | ' + str(self.completed)
+	note = models.CharField(max_length=200, blank=True, null=True)
 
+	def __str__(self):
+		return self.bus + ' | ' + str(self.status)

@@ -1,0 +1,111 @@
+{%  extends 'accounts/main.html' %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+	<br>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card  bg-warning card-body">
+			<h5 class="text-center"> Bestilling af ordrer </h5>
+			<hr class="bg-dark">
+			<a class="btn btn-outline-info  btn-sm btn-block" href="">Opdater Kunde-Info</a>
+			<a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'create_order' customer.id %}">Tilføj Ordrer</a>
+
+		</div>
+	</div>
+
+	<div class="col-md">
+		<div class="card bg-success card-body">
+			<h5 class="text-center text-white">{{customer.name}}</h5>
+			<hr class="bg-white">
+			<p class="text-left text-white text-bold"> E-mail: {{customer.email}}</p>
+			<p class="text-left text-white text-bold">Tel: {{customer.phone}}</p>
+		</div>
+	</div>
+
+	<div class="col-md">
+		<div class="card bg-dark card-body">
+			<h5 class="text-center text-white">Busser i Alt</h5>
+			<h1 class="text-center text-white padding: 10px" >{{order_count}}</h1>
+			<hr class="bg-white">
+			<h5 class="text-center text-success">Klar</h5>
+			<h1 class="text-center text-success padding: 10px" >{{Klar}}</h1>
+			<hr class="bg-white">
+			<h5 class="text-center text-danger">Ikke Klar</h5>
+			<h1 class="text-center text-danger padding: 10px" >{{Ikke_Klar}}</h1>
+		</div>
+	</div>
+</div>
+
+
+<br>
+<div class="container-sm">
+	<div class="col">
+		<div class="card card-body">
+
+			<form class="form-inline" method="get">
+				{{myFilter.form}}
+
+		    <button class="btn btn-primary" type="submit">Søg</button>
+		  </form>
+
+		</div>
+	</div>
+	
+</div>
+<br>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+		<hr>
+		<table class="table table-bordered border-primary shadow-lg p-3 mb-5 bg-body rounded table-sm  table-hover">		
+	
+	<thead class="bg-warning shadow-lg p-3 mb-5 bg-body rounded">
+	  
+    <tr>
+      <th class="text-center" scope="col"><small><h6>Bus</small></th>
+      <th class="text-center" scope="col"><small><h6>Program</small></th>
+      <th class="text-center" scope="col"><small><h6>Start</small></th>
+	  <th class="text-center" scope="col"><small><h6>Slut</small></th>
+      <th class="text-center" scope="col"><small><h6>Status</small></th>
+	</tr>
+</thead>
+
+
+
+
+			
+{% for order in orders %}
+	  {% if order.status == "Klar" %}
+
+	<tr class="table shadow-lg p-3 mb-5 table-bordered table-success">
+        <td class="text-center"><small>{{ order.bus }}</small></td>
+        <td class="text-center"><small>{{ customer.category }}</small></td>
+		<td class="text-center"><small>{{ order.start_date|date:'H:i' }}</small></td>
+		<td class="text-center"><small>{{ order.end_date|date:'H:i' }}</small></td>		
+		<td class="text-center"><center><a href="{% url 'cross_off' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+	</tr>
+
+	{% else %}
+
+	<tr class="table shadow-lg p-3 mb-5 table-bordered table-danger">
+        <td class="text-center"><small>{{ order.bus }}</small></td>
+        <td class="text-center"><small>{{ order.product }}</small></td>
+		<td class="text-center"><small>{{ order.start_date|date:'H:i' }}</small></td>
+		<td class="text-center"><small>{{ order.end_date|date:'H:i' }}</small></td>	
+		<td class="text-center"><center><a href="{% url 'uncross' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+	</tr>
+				{% endif %}
+				{% endfor %}
+				   </table>
+	</div>
+	</div>
+</div>
+
+{% endblock %}

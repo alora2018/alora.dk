@@ -1,15 +1,25 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
-	path('', views.home, name='home'),
-	path('about/', views.about, name='about'),
-	path('vaskelist/', views.vaskelist, name='vaskelist'),
-	path('larsenbus/', views.larsenbus, name='larsenbus'),
-	path('index/', views.index, name='index'),
-	path('delete/<list_id>', views.delete, name='delete'),
+    path('register/', views.registerPage, name="register"),
+	path('login/', views.loginPage, name="login"),  
+	path('logout/', views.logoutUser, name="logout"),
+
+    path('', views.home, name="home"),
+    path('user/', views.userPage, name="user-page"),
+
+    path('account/', views.accountSettings, name="account"),
+
+    path('products/', views.products, name='products'),
+    path('customer/<str:pk_test>/', views.customer, name="customer"),
+
+    path('create_order/<str:pk>/', views.createOrder, name="create_order"),
+    path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
+    path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
 	path('cross_off/<list_id>', views.cross_off, name='cross_off'),
 	path('uncross/<list_id>', views.uncross, name='uncross'),
-	path('edit/<list_id>', views.edit, name='edit'),
+
 
 ]
