@@ -18,8 +18,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
  # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'HIDDEN'
  # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['busvask.herokuapp.com', 'www.buswash.dk', 'buswash.dk', 'localhost','127.0.0.1']
+DEBUG = False
+ALLOWED_HOSTS = ['busvask-dk.herokuapp.com', 'localhost','127.0.0.1']
  # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
