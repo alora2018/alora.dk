@@ -19,7 +19,11 @@ urlpatterns = [
     path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
     path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
 	path('cross_off/<list_id>', views.cross_off, name='cross_off'),
-	path('uncross/<list_id>', views.uncross, name='uncross'),
+	path('ja_stovsuge/<list_id>', views.ja_stovsuge, name='ja_stovsuge'),
+	path('nej_stovsuge/<list_id>', views.nej_stovsuge, name='nej_stovsuge'),
+	path('ja_vinduer/<list_id>', views.ja_vinduer, name='ja_vinduer'),
+	path('nej_vinduer/<list_id>', views.nej_vinduer, name='nej_vinduer'),
+
 
 
 ]

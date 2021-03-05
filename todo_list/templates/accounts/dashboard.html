@@ -48,6 +48,9 @@
       <th class="text-center" scope="col"><small><h6>Start</small></th>
       <th class="text-center" scope="col"><small><h6>Slut</small></th>
       <th class="text-center" scope="col"><small><h6>Status</small></th>
+	  <th class="text-center" scope="col"><small><h6>Støvsuget</small></th>
+	  <th class="text-center" scope="col"><small><h6>Vinduer</small></th>
+
 	</tr>
 </thead>
 
@@ -64,7 +67,14 @@
         <td class="text-center"><small>{{ order.product }}</small></td>
 		<td class="text-center"><small>{{ order.start_date|date:'H:i' }}</small></td>
 		<td class="text-center"><small>{{ order.end_date|date:'H:i' }}</small></td>			<td class="text-center"><center><a href="{% url 'cross_off' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<td class="text-center"><center><a href="{% url 'cross_off' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="green" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<td class="text-center"><center><a href="{% url 'uncross' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
 		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+		<td class="text-center"><center><a href="{% url 'nej_stovsuge' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="black" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+		<td class="text-center"><center><a href="{% url 'ja_vinduer' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="orange" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+
 	</tr>
 
 	{% else %}
@@ -76,8 +86,14 @@
 		<td class="text-center"><small>{{ order.start_date|date:'H:i' }}</small></td>
 		<td class="text-center"><small>{{ order.end_date|date:'H:i' }}</small></td>			<td class="text-center"><center><a href="{% url 'uncross' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
 		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
-	</tr>
+		<td class="text-center"><center><a href="{% url 'uncross' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+		<td class="text-center"><center><a href="{% url 'nej_stovsuge' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="black" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
+		<td class="text-center"><center><a href="{% url 'nej_vinduer' order.id %}"><small><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="blue" class="bi bi-circle-fill" viewBox="0 0 16 16">
+		<circle cx="8" cy="8" r="8"/></a></center></svg></small></td>
 
+	</tr>
 				{% endif %}
 				{% endfor %}
 				   </table>
