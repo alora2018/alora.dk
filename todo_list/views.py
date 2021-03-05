@@ -90,11 +90,15 @@ def userPage(request):
 	total_orders = orders.count()
 	Klar = orders.filter(status='Klar').count()
 	Ikke_Klar = orders.filter(status='Ikke_Klar').count()
-
+	Ja = orders.filter(VINDUER='Ja').count()
+	Nej = orders.filter(VINDUER='Nej').count()
+	Yes = orders.filter(STOVSUGE='Yes').count()
+	No = orders.filter(STOVSUGE='No').count()
 	print('ORDERS:', orders)
 
 	context = {'orders':orders, 'total_orders':total_orders,
-	'Klar':Klar,'Ikke_Klar':Ikke_Klar}
+	'Klar':Klar,'Ikke_Klar':Ikke_Klar,
+	'Ja': Ja, 'Nej': Nej, 'Yes': Yes, 'No': No}
 	return render(request, 'accounts/user.html', context)
 
 
@@ -132,11 +136,17 @@ def customer(request, pk_test):
 	total_orders = orders.count()
 	Klar = orders.filter(status='Klar').count()
 	Ikke_Klar = orders.filter(status='Ikke_Klar').count()
+	Ja = orders.filter(VINDUER='Ja').count()
+	Nej = orders.filter(VINDUER='Nej').count()
+	Yes = orders.filter(STOVSUGE='Yes').count()
+	No = orders.filter(STOVSUGE='No').count()
+
+
 
 	myFilter = OrderFilter(request.GET, queryset=orders)
 	orders = myFilter.qs 
 
-	context = {'customer':customer, 'Klar':Klar, 'Ikke_Klar':Ikke_Klar, 'orders':orders, 'order_count':order_count,
+	context = {'customer':customer, 'Klar':Klar, 'Ikke_Klar':Ikke_Klar, 'Ja': Ja, 'Nej': Nej, 'Yes': Yes, 'No': No, 'orders':orders, 'order_count':order_count,
 	'myFilter':myFilter}
 	return render(request, 'accounts/customer.html',context)
 

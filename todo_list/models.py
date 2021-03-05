@@ -45,7 +45,15 @@ class Order(models.Model):
 			('Klar', 'Klar'),
 			)
 
+	STOVSUGE = (
+			('Ja', 'Ja'),
+			('Nej', 'Nej'),
+			)
 
+	VINDUER = (
+			('Ja', 'Ja'),
+			('Nej', 'Nej'),
+			)
 
 	BUS_CHOICES = ( 
 	("", "Valg bus!"),
@@ -116,6 +124,8 @@ class Order(models.Model):
 	bus = models.CharField(max_length=200, choices = BUS_CHOICES, 
     default = '')
 	status = models.CharField(max_length=200, null=True, blank=True,  choices=STATUS)
+	stovsuge = models.CharField(max_length=200, null=True, blank=True,  choices=STOVSUGE)
+	vinduer = models.CharField(max_length=200, null=True, blank=True,  choices=VINDUER)
 	start_date = models.DateTimeField(blank=True, null=True)
 	end_date = models.DateTimeField(blank=True, null=True)
 	note = models.CharField(max_length=200, blank=True, null=True)
