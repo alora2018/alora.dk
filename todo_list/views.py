@@ -221,4 +221,35 @@ def uncross(request, list_id):
 	order.save()
 	return redirect('/')
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def ja_stovsuge(request, list_id):
+	order = Order.objects.get(pk=list_id)
+	order.stovsuge = 'Ja'
+	order.save()
+	return redirect('/')
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def nej_stovsuge(request, list_id):
+	order = Order.objects.get(pk=list_id)
+	order.stovsuge = 'Nej'
+	order.save()
+	return redirect('/')
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def ja_vinduer(request, list_id):
+	order = Order.objects.get(pk=list_id)
+	order.vinduer = 'Yes'
+	order.save()
+	return redirect('/')
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def nej_vinduer(request, list_id):
+	order = Order.objects.get(pk=list_id)
+	order.vinduer = 'No'
+	order.save()
+	return redirect('/')
 

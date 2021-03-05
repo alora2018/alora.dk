@@ -51,8 +51,8 @@ class Order(models.Model):
 			)
 
 	VINDUER = (
-			('Ja', 'Ja'),
-			('Nej', 'Nej'),
+			('Yes', 'Yes'),
+			('No', 'No'),
 			)
 
 	BUS_CHOICES = ( 
